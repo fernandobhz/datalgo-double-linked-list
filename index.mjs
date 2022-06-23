@@ -2,7 +2,8 @@ class LinkedList {
   constructor(value) {
     this.head = {
       value: value,
-      next: null
+      next: null,
+      previous: null
     };
     this.tail = this.head;
     this.length = 1;
@@ -10,7 +11,8 @@ class LinkedList {
   append(value) {
     const newTail = {
       value,
-      next: null
+      next: null,
+      previous: this.tail,
     }
 
     this.tail.next = newTail;
@@ -20,9 +22,11 @@ class LinkedList {
   prepend(value) {
     const newHead = {
       value,
-      next: this.head
+      next: this.head,
+      previous: null,
     }
 
+    this.head.previous = newHead;
     this.head = newHead;
     this.length++;
   }
@@ -47,14 +51,17 @@ class LinkedList {
 
     const newNode = {
       value,
-      next: currentNode
+      next: currentNode,
+      previous: previousNode,
     }
 
-    previousNode.next = newNode;
+    previousNode.next = newNode;    
+    currentNode.previous = newNode;
   }
   remove(index) {
     if (index < 1) {
       this.head = this.head.next;
+      this.head.previous = null;
       return;
     }
 
@@ -73,6 +80,7 @@ class LinkedList {
     }
 
     previousNode.next = currentNode.next;
+    currentNode.next.previous = previousNode;
   }
   printList(label = 0) {
     const array = [];
@@ -85,6 +93,17 @@ class LinkedList {
 
     console.log(label, array.join(' > '));
   }
+  printListReverse(label = 0) {
+    const array = [];
+    let currentNode = this.tail;
+
+    while (currentNode !== null) {
+      array.push(currentNode.value);
+      currentNode = currentNode.previous;
+    }
+
+    console.log(label, array.join(' < '));
+  }
 }
 // 1 > 10 > 5 > 16
 // 1 > 10 > 99 > 5 > 16
@@ -94,27 +113,45 @@ myLinkedList.printList(1);
 
 myLinkedList.append(5);
 myLinkedList.printList(2);
+myLinkedList.printListReverse(2);
+console.log('');
 
 myLinkedList.append(16);
 myLinkedList.printList(3);
+myLinkedList.printListReverse(3);
+console.log('');
 
 myLinkedList.prepend(1);
 myLinkedList.printList(4);
+myLinkedList.printListReverse(4);
+console.log('');
 
 myLinkedList.append(99);
 myLinkedList.printList(5);
+myLinkedList.printListReverse(5);
+console.log('');
 
 myLinkedList.insert(2, 99);
 myLinkedList.printList(6);
+myLinkedList.printListReverse(6);
+console.log('');
 
 myLinkedList.insert(20, 88);
 myLinkedList.printList(7);
+myLinkedList.printListReverse(7);
+console.log('');
 
 myLinkedList.insert(0, -1);
-myLinkedList.printList(7);
+myLinkedList.printList(8);
+myLinkedList.printListReverse(8);
+console.log('');
 
 myLinkedList.remove(0);
-myLinkedList.printList(8);
+myLinkedList.printList(9);
+myLinkedList.printListReverse(9);
+console.log('');
 
 myLinkedList.remove(2);
-myLinkedList.printList(9);
+myLinkedList.printList(0);
+myLinkedList.printListReverse(0);
+console.log('');
